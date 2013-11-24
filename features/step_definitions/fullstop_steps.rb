@@ -1,6 +1,7 @@
 include FileUtils
 
 FILES = %w(.vimrc .bashrc .exrc)
+NEW_FILE = '.inputrc'
 
 Given /^a git repo with some dotfiles at "([^"]*)"$/ do |repo_dir|
   @repo_dir = repo_dir
@@ -23,7 +24,7 @@ Then /^the dotfiles should be checked out in the directory "([^"]*)"$/ do |dotfi
   base_dir = File.dirname(dotfiles_dir)
   base_dir = ENV['HOME'] if base_dir == "~"
   dotfiles_dir = File.join(base_dir,File.basename(dotfiles_dir))
-  
+
   File.exist?(dotfiles_dir).should == true
   Dir.chdir dotfiles_dir do
     FILES.each do |file|
@@ -38,4 +39,21 @@ Then /^the files in "([^"]*)" should be symlinked in my home directory$/ do |dot
       File.lstat(file).should be_symlink
     end
   end
+end
+
+Given /^I have my dotfiles cloned and symlinked to "([^"]*)"$/ do |dir|
+  step %{I successfully run `fullstop file://#{@repo_dir}`}
+end
+
+Given /^there's a new file in the git repo$/ do
+  Dir.chdir @repo_dir do
+    touch NEW_FILE
+    sh "git add #{NEW_FILE}"
+    sh "git commit -m 'added'"
+  end
+end
+
+Then /^the dotfiles in "([^"]*)" should be re\-cloned$/ do |dir|
+  @files_override = FILES + [NEW_FILE]
+  step %{the dotfiles should be checked out in the directory "#{dir}"}
 end
