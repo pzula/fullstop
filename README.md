@@ -1,6 +1,6 @@
 # Fullstop
 
-TODO: Write a gem description
+This gem is intended to be used to manage dotfiles across systems.  Using it will allow you to easily sync dotfiles from a git repo to a new system with a few short commands.
 
 ## Installation
 
@@ -20,6 +20,7 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+TODO: Write full commands and help here
 ## Contributing
 
 1. Fork it

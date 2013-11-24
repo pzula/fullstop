@@ -1,19 +1,15 @@
-= fullstop - DESCRIBE YOUR GEM
+= fullstop - Access your dotfiles from anywhere!
 
-Author::  YOUR NAME (YOUR EMAIL)
-Copyright:: Copyright (c) 2013 YOUR NAME
-
+Author::  PERSA ZULA (PERSA@PERSAZULA.COM)
+Copyright:: Copyright (c) 2013 PERSA ZULA
 
 License:: apache, see LICENSE.txt
 
-
-
-DESCRIBE YOUR GEM HERE
+This gem is intended to be used to manage dotfiles across systems.  Using it will allow you to easily sync dotfiles from a git repo to a new system with a few short commands.
 
 == Links
 
-* {Source on Github}[LINK TO GITHUB]
-* RDoc[LINK TO RDOC.INFO]
+* {Source on Github}[https://github.com/pzula/fullstop]
 
 == Install
 
