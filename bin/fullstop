@@ -9,12 +9,13 @@ class App
   include Methadone::Main
   include Methadone::CLILogging
   include Methadone::SH
+  include Fullstop
 
   require 'fullstop/repo'
 
   main do |repo_url|
     Dir.chdir options['checkout-dir'] do
-      repo = Repo.clone_from(repo_url,options[:force])
+      repo = Fullstop::Repo.clone_from(repo_url,options[:force])
       repo.files do |file|
         link_file(repo,file,options[:force])
       end
