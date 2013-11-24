@@ -10,31 +10,14 @@ class App
   include Methadone::CLILogging
   include Methadone::SH
 
+  require 'fullstop/repo'
+
   main do |repo_url|
-    Dir.chdir options['checkout-dir'] do 
-      repo_dir = clone_repo(repo_url, options[:force])
-      files_in(repo_dir) do |file|
-        link_file(repo_dir,file,options[:force])
+    Dir.chdir options['checkout-dir'] do
+      repo = Repo.clone_from(repo_url,options[:force])
+      repo.files do |file|
+        link_file(repo,file,options[:force])
       end
-    end
-  end
-
-  def self.clone_repo(repo_url,force)
-    repo_dir = repo_url.split(/\//)[-1].gsub(/\.git$/,'')
-    if force && Dir.exists?(repo_dir)
-      warn "deleting #{repo_dir} before cloning"
-      FileUtils.rm_rf repo_dir
-    end
-    unless sh("git clone #{repo_url}") == 0
-      exit_now!("checkout dir already exists, use --force to overwrite")
-    end
-    repo_dir
-  end
-
-  def self.files_in(repo_dir)
-    Dir.entries(repo_dir).each do |file|
-      next if file == '.' || file == '..' || file == '.git'
-      yield file
     end
   end
 
