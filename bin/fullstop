@@ -13,10 +13,15 @@ class App
   main do |repo_url|
 
     Dir.chdir options['checkout-dir'] do
-      if sh("git clone #{repo_url}") == 0
-        basedir = repo_url.split(/\//)[-1].gsub(/\.git$/,'')
+      basedir = repo_url.split(/\//)[-1].gsub(/\.git$/,'')
+      if options[:force] && Dir.exists?(basedir)
+        warn "deleting #{basedir} before cloning"
+        FileUtils.rm_rf basedir
+      end
+      if sh("git clone #{repo_url}") == 0  
         Dir.entries(basedir).each do |file|
           next if file == '.' || file == '..' || file == '.git'
+          FileUtils.rm(file) if File.exists?(file) && options[:force]
           FileUtils.ln_s File.join(basedir,file),'.'
         end
       else

@@ -27,7 +27,7 @@ Feature: Checkout dotfiles
     Given a git repo with some dotfiles at "/tmp/dotfiles.git"
     And I have my dotfiles cloned and symlinked to "~/dotfiles"
     And there's a new file in the git repo
-    When I run `fullstop --force file:///tmp/dotfiles.git`
+    When I successfully run `fullstop --force file:///tmp/dotfiles.git`
     Then the dotfiles in "~/dotfiles" should be re-cloned
     And the files in "~/dotfiles" should be symlinked in my home directory
 
