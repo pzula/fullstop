@@ -3,20 +3,29 @@
 require 'optparse'
 require 'methadone'
 require 'fullstop.rb'
+require 'fileutils'
 
 class App
   include Methadone::Main
   include Methadone::CLILogging
+  include Methadone::SH
 
-  main do # Add args you want: |like,so|
-    # your program code here
-    # You can access CLI options via
-    # the options Hash
+  main do |repo_url|
+
+    Dir.chdir options['checkout-dir'] do
+      sh "git clone #{repo_url}"
+      basedir = repo_url.split(/\//)[-1].gsub(/\.git$/,'')
+      Dir.entries(basedir).each do |file|
+        next if file == '.' || file == '..' || file == '.git'
+        FileUtils.ln_s File.join(basedir,file),'.'
+      end
+    end
+
   end
 
   # supplemental methods here
 
-  # Declare command-line interface here
+  # declare command-line interface here
 
   # description "one line description of your app"
   #
@@ -39,6 +48,11 @@ class App
 
 
   description 'Manage dotfile from a git repo'
+
+  options['checkout-dir'] = ENV['HOME']
+  on("--force","Force overwriting existing files")
+  on("-d DIR","--checkout-dir",
+   "Set the location of the checkout dir")
 
   arg :repo_url, "URL to the git repository containing your dotfiles"
 
