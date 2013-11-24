@@ -17,7 +17,7 @@ class App
     Dir.chdir options['checkout-dir'] do
       repo = Fullstop::Repo.clone_from(repo_url,options[:force])
       repo.files do |file|
-        link_file(repo,file,options[:force])
+        link_file(repo.repo_dir,file,options[:force])
       end
     end
   end
